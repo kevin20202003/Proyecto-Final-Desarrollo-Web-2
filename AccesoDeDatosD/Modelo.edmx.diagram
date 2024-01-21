@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b172cf57a1574ab1ad581575f126bb9e" Name="Diagram1">
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Usuarios" Width="1.5" PointX="3" PointY="5.125" />
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Roles" Width="1.5" PointX="0.75" PointY="5.75" />
+        <AssociationConnector Association="AgendamientoTurnosVehicularesModel.FK_Usuarios_Roles" />
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Servicios" Width="1.5" PointX="5.375" PointY="0.875" />
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Sucursales" Width="1.5" PointX="7.375" PointY="0.875" />
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Comentarios" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AgendamientoTurnosVehicularesModel.Citas" Width="1.5" PointX="9.625" PointY="2.75" />
+        <AssociationConnector Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdServici__73BA3083" />
+        <AssociationConnector Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdSucursa__7E37BEF6" />
+        <AssociationConnector Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdUsuario__70DDC3D8" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

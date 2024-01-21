@@ -1,0 +1,686 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AgendamientoTurnosVehicularesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Citas">
+          <Key>
+            <PropertyRef Name="Cedula" />
+          </Key>
+          <Property Name="Cedula" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="Apellido" Type="varchar" MaxLength="100" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" />
+          <Property Name="Correo" Type="varchar" MaxLength="100" />
+          <Property Name="FechaHora" Type="datetime" />
+          <Property Name="IdServicio" Type="int" />
+          <Property Name="IdUsuario" Type="int" />
+          <Property Name="IdSucursal" Type="int" />
+        </EntityType>
+        <EntityType Name="Comentarios">
+          <Key>
+            <PropertyRef Name="id_comentario" />
+          </Key>
+          <Property Name="id_comentario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="comentario" Type="varchar" MaxLength="255" />
+          <Property Name="calificacion" Type="int" />
+          <Property Name="mejoras" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreRol" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="IdServicio" />
+          </Key>
+          <Property Name="IdServicio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sucursales">
+          <Key>
+            <PropertyRef Name="IdSucursal" />
+          </Key>
+          <Property Name="IdSucursal" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreSucursal" Type="varchar" MaxLength="100" />
+          <Property Name="Direccion" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellido" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Passwork" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IdRol" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Citas__IdServici__73BA3083">
+          <End Role="Servicios" Type="Self.Servicios" Multiplicity="0..1" />
+          <End Role="Citas" Type="Self.Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicios">
+              <PropertyRef Name="IdServicio" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Citas__IdSucursa__7E37BEF6">
+          <End Role="Sucursales" Type="Self.Sucursales" Multiplicity="0..1" />
+          <End Role="Citas" Type="Self.Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursales">
+              <PropertyRef Name="IdSucursal" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdSucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Citas__IdUsuario__70DDC3D8">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="0..1" />
+          <End Role="Citas" Type="Self.Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuarios_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_actualizar_servicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdServicio" Type="int" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_actualizar_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdSucursal" Type="int" Mode="In" />
+          <Parameter Name="NombreSucursal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_eliminar_servicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_eliminar_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NombreSucursal" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_insertar_citas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Cedula" Type="varchar" Mode="In" />
+          <Parameter Name="Nombre" Type="varchar" Mode="In" />
+          <Parameter Name="Apellido" Type="varchar" Mode="In" />
+          <Parameter Name="Telefono" Type="varchar" Mode="In" />
+          <Parameter Name="Correo" Type="varchar" Mode="In" />
+          <Parameter Name="FechaHora" Type="datetime" Mode="In" />
+          <Parameter Name="IdServicio" Type="int" Mode="In" />
+          <Parameter Name="IdSucursal" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_insertar_clientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strNombre" Type="varchar" Mode="In" />
+          <Parameter Name="strApellido" Type="varchar" Mode="In" />
+          <Parameter Name="strTelefono" Type="varchar" Mode="In" />
+          <Parameter Name="strEmail" Type="nvarchar" Mode="In" />
+          <Parameter Name="strPasswork" Type="varchar(max)" Mode="In" />
+          <Parameter Name="intRol" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_insertar_comentario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Comentario" Type="varchar" Mode="In" />
+          <Parameter Name="Calificacion" Type="int" Mode="In" />
+          <Parameter Name="Mejoras" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_insertar_servicio" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strNombre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_insertar_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strNombreSucrsal" Type="varchar" Mode="In" />
+          <Parameter Name="strDireccion" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Listado_Citas" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strfiltro" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_listado_comentarios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strfiltro" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Listado_servicios" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strfiltro" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_Listado_sucursal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strfiltro" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="sp_login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="strEmail" Type="nvarchar" Mode="In" />
+          <Parameter Name="strPassword" Type="varchar(max)" Mode="In" />
+          <Parameter Name="intIdRol" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="AgendamientoTurnosVehicularesModelStoreContainer">
+          <EntitySet Name="Citas" EntityType="Self.Citas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Comentarios" EntityType="Self.Comentarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servicios" EntityType="Self.Servicios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sucursales" EntityType="Self.Sucursales" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Citas__IdServici__73BA3083" Association="Self.FK__Citas__IdServici__73BA3083">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Citas__IdSucursa__7E37BEF6" Association="Self.FK__Citas__IdSucursa__7E37BEF6">
+            <End Role="Sucursales" EntitySet="Sucursales" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Citas__IdUsuario__70DDC3D8" Association="Self.FK__Citas__IdUsuario__70DDC3D8">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_Roles" Association="Self.FK_Usuarios_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AgendamientoTurnosVehicularesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AgendamientoTurnosVehicularesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Usuarios" EntityType="AgendamientoTurnosVehicularesModel.Usuarios" />
+          <EntitySet Name="Roles" EntityType="AgendamientoTurnosVehicularesModel.Roles" />
+          <AssociationSet Name="FK_Usuarios_Roles" Association="AgendamientoTurnosVehicularesModel.FK_Usuarios_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <EntitySet Name="Servicios" EntityType="AgendamientoTurnosVehicularesModel.Servicios" />
+          <FunctionImport Name="sp_insertar_clientes" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_insertar_clientes_Result)">
+            <Parameter Name="strNombre" Mode="In" Type="String" />
+            <Parameter Name="strApellido" Mode="In" Type="String" />
+            <Parameter Name="strTelefono" Mode="In" Type="String" />
+            <Parameter Name="strEmail" Mode="In" Type="String" />
+            <Parameter Name="strPasswork" Mode="In" Type="String" />
+            <Parameter Name="intRol" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Sucursales" EntityType="AgendamientoTurnosVehicularesModel.Sucursales" />
+          <FunctionImport Name="sp_insertar_citas" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_insertar_citas_Result)">
+            <Parameter Name="Cedula" Mode="In" Type="String" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Apellido" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Correo" Mode="In" Type="String" />
+            <Parameter Name="FechaHora" Mode="In" Type="DateTime" />
+            <Parameter Name="IdServicio" Mode="In" Type="Int32" />
+            <Parameter Name="IdSucursal" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_login" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_login_Result)">
+            <Parameter Name="strEmail" Mode="In" Type="String" />
+            <Parameter Name="strPassword" Mode="In" Type="String" />
+            <Parameter Name="intIdRol" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Comentarios" EntityType="AgendamientoTurnosVehicularesModel.Comentarios" />
+          <FunctionImport Name="sp_insertar_comentario" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_insertar_comentario_Result)">
+            <Parameter Name="Comentario" Mode="In" Type="String" />
+            <Parameter Name="Calificacion" Mode="In" Type="Int32" />
+            <Parameter Name="Mejoras" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_listado_comentarios" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_listado_comentarios_Result1)">
+          <Parameter Name="strfiltro" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_insertar_servicio" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_insertar_servicio_Result)">
+          <Parameter Name="strNombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Listado_servicios" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_Listado_servicios_Result1)">
+          <Parameter Name="strfiltro" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_eliminar_servicio" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_eliminar_servicio_Result)">
+          <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_actualizar_servicio" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_actualizar_servicio_Result)">
+            <Parameter Name="IdServicio" Mode="In" Type="Int32" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_actualizar_sucursal" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_actualizar_sucursal_Result)">
+            <Parameter Name="IdSucursal" Mode="In" Type="Int32" />
+            <Parameter Name="NombreSucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_eliminar_sucursal" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_eliminar_sucursal_Result)">
+          <Parameter Name="NombreSucursal" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_insertar_sucursal" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_insertar_sucursal_Result)">
+            <Parameter Name="strNombreSucrsal" Mode="In" Type="String" />
+            <Parameter Name="strDireccion" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_Listado_sucursal" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_Listado_sucursal_Result1)">
+          <Parameter Name="strfiltro" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Citas" EntityType="AgendamientoTurnosVehicularesModel.Citas" />
+          <AssociationSet Name="FK__Citas__IdServici__73BA3083" Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdServici__73BA3083">
+            <End Role="Servicios" EntitySet="Servicios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Citas__IdSucursa__7E37BEF6" Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdSucursa__7E37BEF6">
+            <End Role="Sucursales" EntitySet="Sucursales" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Citas__IdUsuario__70DDC3D8" Association="AgendamientoTurnosVehicularesModel.FK__Citas__IdUsuario__70DDC3D8">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Citas" EntitySet="Citas" />
+          </AssociationSet>
+          <FunctionImport Name="sp_Listado_Citas" ReturnType="Collection(AgendamientoTurnosVehicularesModel.sp_Listado_Citas_Result1)">
+            <Parameter Name="strfiltro" Mode="In" Type="String" />
+          </FunctionImport>
+          </EntityContainer>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CorreoElectronico" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Passwork" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdRol" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Roles" Relationship="AgendamientoTurnosVehicularesModel.FK_Usuarios_Roles" FromRole="Usuarios" ToRole="Roles" />
+          <NavigationProperty Name="Citas" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdUsuario__70DDC3D8" FromRole="Usuarios" ToRole="Citas" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="IdRol" />
+          </Key>
+          <Property Name="IdRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreRol" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Usuarios" Relationship="AgendamientoTurnosVehicularesModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK_Usuarios_Roles">
+          <End Type="AgendamientoTurnosVehicularesModel.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="AgendamientoTurnosVehicularesModel.Usuarios" Role="Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="IdRol" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="IdRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Servicios">
+          <Key>
+            <PropertyRef Name="IdServicio" />
+          </Key>
+          <Property Name="IdServicio" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Citas" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdServici__73BA3083" FromRole="Servicios" ToRole="Citas" />
+        </EntityType>
+        <ComplexType Name="sp_insertar_clientes_Result">
+          <Property Type="Boolean" Name="respuesta" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Sucursales">
+          <Key>
+            <PropertyRef Name="IdSucursal" />
+          </Key>
+          <Property Name="IdSucursal" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreSucursal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Direccion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Citas" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdSucursa__7E37BEF6" FromRole="Sucursales" ToRole="Citas" />
+        </EntityType>
+        <ComplexType Name="sp_insertar_citas_Result">
+          <Property Type="Int32" Name="respuesta" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_login_Result">
+          <Property Type="Int32" Name="respuesta" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="Comentarios">
+          <Key>
+            <PropertyRef Name="id_comentario" />
+          </Key>
+          <Property Name="id_comentario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="comentario" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="calificacion" Type="Int32" />
+          <Property Name="mejoras" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="sp_insertar_comentario_Result">
+          <Property Type="Int32" Name="respuesta" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_listado_comentarios_Result">
+          <Property Type="Int32" Name="id_comentario" Nullable="false" />
+          <Property Type="String" Name="comentario" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="calificacion" Nullable="true" />
+          <Property Type="String" Name="mejoras" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="sp_listado_comentarios_Result1">
+          <Property Type="Int32" Name="id_comentario" Nullable="false" />
+          <Property Type="String" Name="comentario" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="calificacion" Nullable="true" />
+          <Property Type="String" Name="mejoras" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_servicios_Result">
+          <Property Type="Int32" Name="IdServicio" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_insertar_servicio_Result">
+          <Property Type="Boolean" Name="respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_servicios_Result1">
+          <Property Type="Int32" Name="IdServicio" Nullable="false" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_actualizar_servicio_Result">
+          <Property Type="Boolean" Name="Respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_eliminar_servicio_Result">
+          <Property Type="Boolean" Name="Respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_sucursal_Result">
+          <Property Type="Int32" Name="IdSucursal" Nullable="false" />
+          <Property Type="String" Name="NombreSucursal" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <EntityType Name="Citas">
+          <Key>
+            <PropertyRef Name="Cedula" />
+          </Key>
+          <Property Name="Cedula" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Telefono" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Correo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="FechaHora" Type="DateTime" Precision="3" />
+          <Property Name="IdServicio" Type="Int32" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="IdSucursal" Type="Int32" />
+          <NavigationProperty Name="Servicios" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdServici__73BA3083" FromRole="Citas" ToRole="Servicios" />
+          <NavigationProperty Name="Sucursales" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdSucursa__7E37BEF6" FromRole="Citas" ToRole="Sucursales" />
+          <NavigationProperty Name="Usuarios" Relationship="AgendamientoTurnosVehicularesModel.FK__Citas__IdUsuario__70DDC3D8" FromRole="Citas" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK__Citas__IdServici__73BA3083">
+          <End Type="AgendamientoTurnosVehicularesModel.Servicios" Role="Servicios" Multiplicity="0..1" />
+          <End Type="AgendamientoTurnosVehicularesModel.Citas" Role="Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Servicios">
+              <PropertyRef Name="IdServicio" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdServicio" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Citas__IdSucursa__7E37BEF6">
+          <End Type="AgendamientoTurnosVehicularesModel.Sucursales" Role="Sucursales" Multiplicity="0..1" />
+          <End Type="AgendamientoTurnosVehicularesModel.Citas" Role="Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sucursales">
+              <PropertyRef Name="IdSucursal" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdSucursal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Citas__IdUsuario__70DDC3D8">
+          <End Type="AgendamientoTurnosVehicularesModel.Usuarios" Role="Usuarios" Multiplicity="0..1" />
+          <End Type="AgendamientoTurnosVehicularesModel.Citas" Role="Citas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Citas">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_insertar_sucursal_Result">
+          <Property Type="Boolean" Name="respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_sucursal_Result1">
+          <Property Type="Int32" Name="IdSucursal" Nullable="false" />
+          <Property Type="String" Name="NombreSucursal" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_actualizar_sucursal_Result">
+          <Property Type="Boolean" Name="Respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_eliminar_sucursal_Result">
+          <Property Type="Boolean" Name="Respuesta" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_Citas_Result">
+          <Property Type="String" Name="Cedula" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Correo" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="FechaHora" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="IdServicio" Nullable="true" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="true" />
+          <Property Type="Int32" Name="IdSucursal" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_Listado_Citas_Result1">
+          <Property Type="String" Name="Cedula" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Apellido" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Correo" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="FechaHora" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="IdServicio" Nullable="true" />
+          <Property Type="Int32" Name="IdUsuario" Nullable="true" />
+          <Property Type="Int32" Name="IdSucursal" Nullable="true" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AgendamientoTurnosVehicularesModelStoreContainer" CdmEntityContainer="AgendamientoTurnosVehicularesEntities">
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+                <ScalarProperty Name="Passwork" ColumnName="Passwork" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="NombreRol" ColumnName="NombreRol" />
+                <ScalarProperty Name="IdRol" ColumnName="IdRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servicios">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Servicios">
+              <MappingFragment StoreEntitySet="Servicios">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="IdServicio" ColumnName="IdServicio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_insertar_clientes" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_insertar_clientes" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_insertar_clientes_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Sucursales">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Sucursales">
+              <MappingFragment StoreEntitySet="Sucursales">
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="NombreSucursal" ColumnName="NombreSucursal" />
+                <ScalarProperty Name="IdSucursal" ColumnName="IdSucursal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_insertar_citas" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_insertar_citas" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_insertar_citas_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_login" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_login" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_login_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Comentarios">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Comentarios">
+              <MappingFragment StoreEntitySet="Comentarios">
+                <ScalarProperty Name="mejoras" ColumnName="mejoras" />
+                <ScalarProperty Name="calificacion" ColumnName="calificacion" />
+                <ScalarProperty Name="comentario" ColumnName="comentario" />
+                <ScalarProperty Name="id_comentario" ColumnName="id_comentario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_insertar_comentario" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_insertar_comentario" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_insertar_comentario_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_listado_comentarios" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_listado_comentarios">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_listado_comentarios_Result1">
+                <ScalarProperty Name="id_comentario" ColumnName="id_comentario" />
+                <ScalarProperty Name="comentario" ColumnName="comentario" />
+                <ScalarProperty Name="calificacion" ColumnName="calificacion" />
+                <ScalarProperty Name="mejoras" ColumnName="mejoras" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_insertar_servicio" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_insertar_servicio" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_insertar_servicio_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Listado_servicios" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_Listado_servicios">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_Listado_servicios_Result1">
+                <ScalarProperty Name="IdServicio" ColumnName="IdServicio" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_eliminar_servicio" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_eliminar_servicio" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_eliminar_servicio_Result">
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_actualizar_servicio" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_actualizar_servicio" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_actualizar_servicio_Result">
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_actualizar_sucursal" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_actualizar_sucursal" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_actualizar_sucursal_Result">
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_eliminar_sucursal" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_eliminar_sucursal" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_eliminar_sucursal_Result">
+                <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_insertar_sucursal" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_insertar_sucursal" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_insertar_sucursal_Result">
+                <ScalarProperty Name="respuesta" ColumnName="respuesta" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_Listado_sucursal" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_Listado_sucursal">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_Listado_sucursal_Result1">
+                <ScalarProperty Name="IdSucursal" ColumnName="IdSucursal" />
+                <ScalarProperty Name="NombreSucursal" ColumnName="NombreSucursal" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Citas">
+            <EntityTypeMapping TypeName="AgendamientoTurnosVehicularesModel.Citas">
+              <MappingFragment StoreEntitySet="Citas">
+                <ScalarProperty Name="IdSucursal" ColumnName="IdSucursal" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdServicio" ColumnName="IdServicio" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_Listado_Citas" FunctionName="AgendamientoTurnosVehicularesModel.Store.sp_Listado_Citas">
+          <ResultMapping>
+              <ComplexTypeMapping TypeName="AgendamientoTurnosVehicularesModel.sp_Listado_Citas_Result1">
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Correo" ColumnName="Correo" />
+                <ScalarProperty Name="FechaHora" ColumnName="FechaHora" />
+                <ScalarProperty Name="IdServicio" ColumnName="IdServicio" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdSucursal" ColumnName="IdSucursal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
